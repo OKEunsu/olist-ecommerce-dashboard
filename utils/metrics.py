@@ -96,7 +96,11 @@ def _calculate_single_period_metrics(df):
     repeat_purchase_rate = (repeat_customers / total_cust_count) * 100 if total_cust_count > 0 else 0
     
     # 고객 평균 평점
-    avg_review_score = df_copy.groupby('customer_id')['review_score'].mean().mean()
+    # customer_id가 없는 경우를 대비하여 단순 평균 계산 또는 customer_unique_id 사용
+    if 'review_score' in df_copy.columns:
+        avg_review_score = df_copy['review_score'].mean()
+    else:
+        avg_review_score = 0
     
     return {
         'total_amount': total_amount,
